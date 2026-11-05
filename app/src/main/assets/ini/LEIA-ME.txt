@@ -1,0 +1,7 @@
+202501.6.ini = reference/speeduino.ini do projeto Speeduino (https://github.com/speeduino/speeduino),
+tag 202501.6, sem alterações. Licença: GNU GPL versão 2 ou posterior (ver o repositório do Speeduino).
+Direitos dos autores do Speeduino.
+
+Para embutir outra versão: baixar o reference/speeduino.ini da tag desejada e salvar aqui como
+<tag>.ini (ex.: 202501.7.ini). O nome precisa ser igual à versão que a ECU informa no comando S
+("Speeduino 2025.01.7" -> 202501.7).

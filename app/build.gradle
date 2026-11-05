@@ -1,0 +1,25 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'br.ufla.ecutcc'
+    compileSdk 37
+
+    defaultConfig {
+        applicationId 'br.ufla.ecutcc'
+        // Android 5.0: decisão do Osvaldo (04/11/2026), para rodar em celulares antigos.
+        minSdk 21
+        targetSdk 37
+        versionCode 1
+        versionName '0.1'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+// Sem dependências: só a API do Android. Assim o app continua compilando com
+// minSdk 21 (várias bibliotecas AndroidX novas já exigem Android 6.0 ou mais).
