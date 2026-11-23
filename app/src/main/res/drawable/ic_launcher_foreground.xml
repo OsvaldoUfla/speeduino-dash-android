@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícone: relógio (arco verde + ponteiro), na grade de 108 dp do ícone adaptável. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:pathData="M38.44,69.56 A22,22 0 1,1 69.56,69.56"
+        android:strokeColor="#464646"
+        android:strokeWidth="6"
+        android:strokeLineCap="butt" />
+    <path
+        android:pathData="M38.44,69.56 A22,22 0 1,1 71.80,41.07"
+        android:strokeColor="#4CD07D"
+        android:strokeWidth="6"
+        android:strokeLineCap="butt" />
+    <path
+        android:pathData="M54,54 L63,38.41"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M54,54 m-3.5,0 a3.5,3.5 0 1,0 7,0 a3.5,3.5 0 1,0 -7,0"
+        android:fillColor="#FFFFFF" />
+</vector>

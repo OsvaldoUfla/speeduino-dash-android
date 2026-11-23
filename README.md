@@ -1,10 +1,14 @@
-# speeduino-dash-android
+# Speeduino Dash
 
-**English:** a minimal, open source Android dashboard for [Speeduino](https://speeduino.com) ECUs over Bluetooth (HC-05/HC-06). It shows 8 live values (RPM, MAP, TPS, coolant and intake air temperature, battery, injector pulse width and AFR) with gauge or big-number layouts and red out-of-range alerts. It adapts itself to the firmware version by reading the matching `speeduino.ini` (bundled, cached, downloaded from the official Speeduino GitHub, or picked by the user). Android 5.0+ (API 21), plain Java, no external libraries. Contributions are welcome. Documentation below is in Portuguese.
+<img src="docs/icone_512.png" alt="Ícone do Speeduino Dash" width="96">
+
+**English:** Speeduino Dash is a minimal, open source Android dashboard for [Speeduino](https://speeduino.com) ECUs over Bluetooth (HC-05/HC-06). It shows 8 live values (RPM, MAP, TPS, coolant and intake air temperature, battery, injector pulse width and AFR) with gauge or big-number layouts and red out-of-range alerts. It adapts itself to the firmware version by reading the matching `speeduino.ini` (bundled, cached, downloaded from the official Speeduino GitHub, or picked by the user). Android 5.0+ (API 21), plain Java, no external libraries. It can scan for and pair with the Bluetooth module from inside the app, remembers the last module used and reconnects automatically if the link drops. Download the signed APK from the [Releases](https://github.com/OsvaldoUfla/speeduino-dash-android/releases) page. This is an independent project, not affiliated with or endorsed by the Speeduino project. Contributions are welcome. Documentation below is in Portuguese.
 
 ---
 
 Desenvolvido como parte do Trabalho de Conclusão de Curso de Osvaldo Rodrigues de Faria Junior (Sistemas de Informação, Universidade Federal de Lavras, 2026): ECU de injeção eletrônica de baixo custo e código aberto, baseada no Speeduino, para modernizar motores carburados.
+
+**Speeduino Dash** é um projeto independente, sem vínculo oficial com o projeto Speeduino.
 
 App mínimo: conecta pelo Bluetooth ao módulo HC-06 da ECU (Speeduino) e mostra, ao vivo, 8 grandezas: rotação, MAP, borboleta (TPS), temperatura do motor, temperatura do ar, bateria, tempo de injeção e AFR.
 
@@ -12,6 +16,9 @@ App mínimo: conecta pelo Bluetooth ao módulo HC-06 da ECU (Speeduino) e mostra
 - **Android mínimo**: 5.0 (API 21).
 - **Layouts**: relógios ou números grandes (botão "Layout"; a escolha fica salva).
 - **Alertas**: fora da faixa, o mostrador fica vermelho. Hoje: bateria abaixo de 11,5 V ou acima de 14,7 V; temperatura do motor acima de 105 °C. As faixas ficam em `modelo/Grandeza.java`.
+- **Busca e pareamento pelo app**: o botão "Buscar" acha módulos por perto (os não pareados aparecem como `[novo]`); ao conectar num módulo novo, o app pede o PIN (HC-06: 1234) e conecta sozinho depois de parear. Se um módulo pareado recusar a conexão (pareamento velho, por exemplo depois de outro aparelho conectar no HC-06), o app oferece "Parear de novo".
+- **Lembra o último módulo**: ao abrir, o módulo usado da última vez já vem escolhido.
+- **Reconexão automática**: se a conexão cair (distância, interferência), aparece "Conexão perdida – Reconectando... (tentativa N de 10)", com uma tentativa a cada 3 s e o botão Cancelar. "Desconectar" pedido pelo usuário não reconecta.
 - **Não grava log** (fora do escopo do app mínimo).
 
 ## Como o app se adapta ao firmware
@@ -32,7 +39,7 @@ O mesmo do TunerStudio (modo "Tuner Studio" da Serial3 da ECU), conferido em `co
 
 | Pacote / classe | Papel |
 |---|---|
-| `MainActivity` | Tela: lista de módulos pareados, conectar, mostradores, troca de layout, permissões |
+| `MainActivity` | Tela: busca e pareamento, lista de módulos, conectar, reconexão automática, mostradores, troca de layout, permissões |
 | `LeituraContinua` | Laço de leitura (~10 vezes por segundo) em thread própria |
 | `bluetooth/ConexaoBluetooth` | Conexão SPP (porta serial) com o HC-06 |
 | `protocolo/ClienteSpeeduino` | Envelope, CRC32 e comandos `Q`, `S` e `r` |
@@ -41,11 +48,20 @@ O mesmo do TunerStudio (modo "Tuner Studio" da Serial3 da ECU), conferido em `co
 | `modelo/Grandeza` | As 8 grandezas, escalas dos mostradores e faixas de alerta |
 | `ui/Mostrador`, `MostradorRelogio`, `MostradorNumero` | Os dois layouts |
 
+## Baixar
+
+O APK assinado de cada versão fica na página [Releases](https://github.com/OsvaldoUfla/speeduino-dash-android/releases). No celular: baixar o `.apk`, permitir a instalação de fontes desconhecidas e instalar.
+
+## Teste no carro
+
+Testado em 22/11/2026 num Opala 1977 (motor 151) com Speeduino 2025.01.6 e HC-06, num moto g31 (Android 12): com o motor funcionando, conexão, os dois layouts e a reconexão automática. O roteiro automático pelo ADB, com os prints de cada passo, está em [`docs/teste_automatico_2026-11-22/`](docs/teste_automatico_2026-11-22/).
+
 ## Compilar e instalar
 
 1. Abrir esta pasta no Android Studio (File → Open). Ele cria o `local.properties` com o caminho do SDK.
 2. Celular com depuração USB ligada → botão Run.
-3. Antes de abrir o app: parear o `ECU_TCC` nas configurações de Bluetooth do celular (PIN do módulo).
+3. No app: **Buscar** → escolher o módulo → **Conectar** (o pareamento é feito pelo próprio app).
+4. Versão assinada (release): colocar no `local.properties` a linha `assinatura.propriedades=<caminho do keystore.properties>` (a chave fica fora do repositório) e rodar `gradlew assembleRelease`.
 
 Versões usadas: Gradle 9.8.2, Android Gradle Plugin 9.4.1, compileSdk/targetSdk 37. Compilado sem erros em 2026-11-04.
 
@@ -61,6 +77,5 @@ O arquivo `app/src/main/assets/ini/202501.6.ini` é o `reference/speeduino.ini` 
 
 ## Falta
 
-- Testar no carro, com a ECU de verdade (até agora só compilado e testado o leitor do `.ini`).
-- Testar num celular antigo (Android 5 a 11) e num novo (12 ou mais), por causa das permissões.
+- Testar num celular antigo (Android 5 a 11), por causa das permissões (testado no Android 12).
 - Documentação de engenharia de software (requisitos, casos de uso, classes, sequência, testes) para o apêndice do TCC.

@@ -11,8 +11,32 @@ android {
         // Android 5.0: decisão do Osvaldo (04/11/2026), para rodar em celulares antigos.
         minSdk 21
         targetSdk 37
-        versionCode 1
-        versionName '0.1'
+        versionCode 2
+        versionName '1.0'
+    }
+
+    // Assinatura da versão release. A chave fica FORA do repositório; o caminho do
+    // arquivo com as senhas vem do local.properties (que não vai para o git):
+    //   assinatura.propriedades=<caminho do keystore.properties>
+    // Sem essa linha, o assembleRelease gera um APK sem assinatura.
+    def locais = new Properties()
+    def arquivoLocal = rootProject.file('local.properties')
+    if (arquivoLocal.exists()) {
+        arquivoLocal.withInputStream { locais.load(it) }
+    }
+    def caminhoAssinatura = locais.getProperty('assinatura.propriedades')
+    if (caminhoAssinatura != null && file(caminhoAssinatura).exists()) {
+        def assinatura = new Properties()
+        file(caminhoAssinatura).withInputStream { assinatura.load(it) }
+        signingConfigs {
+            release {
+                storeFile file(new File(file(caminhoAssinatura).parentFile, assinatura['storeFile']))
+                storePassword assinatura['storePassword']
+                keyAlias assinatura['keyAlias']
+                keyPassword assinatura['keyPassword']
+            }
+        }
+        buildTypes.release.signingConfig signingConfigs.release
     }
 
     compileOptions {

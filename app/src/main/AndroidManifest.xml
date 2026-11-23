@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
     <!-- A partir do Android 12 (API 31): pedida ao usuário em tempo de execução. -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- Busca de módulos ainda não pareados pelo próprio app (não usa a localização). -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <!-- Até o Android 11 a busca de Bluetooth exige permissão de localização. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
     <!-- Só para baixar o .ini de uma versão de firmware que o app ainda não conhece. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,6 +18,8 @@
 
     <application
         android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Material.NoActionBar">
         <activity
